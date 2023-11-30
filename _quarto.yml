@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Effect of Secondhand Smoke Exposure to Health"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Yangyi Zhang (yz4676)
+    - Fei Du (fd2547)
+  repo-url: https://github.com/Yangyi-Zhang/smoking
   date: today
   page-footer:
     right: |
