@@ -6,7 +6,7 @@ execute:
   echo: true
 
 book:
-  title: "Effect of Secondhand Smoke Exposure to Health"
+  title: "Effect of Smoking and Secondhand Smoke Exposure to Health"
   author:
     - Yangyi Zhang (yz4676)
     - Fei Du (fd2547)

@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>YOUR PROJECT TITLE - 2&nbsp; Data</title>
+<title>Effect of Smoking and Secondhand Smoke Exposure to Health - 2&nbsp; Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -89,9 +123,9 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">YOUR PROJECT TITLE</a> 
+      <a href="./">Effect of Smoking and Secondhand Smoke Exposure to Health</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/Yangyi-Zhang/smoking" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
     </div>
       </div>
@@ -142,10 +176,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
-  <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
+  <li><a href="#technical-description" id="toc-technical-description" class="nav-link active" data-scroll-target="#technical-description"><span class="header-section-number">2.1</span> Technical Description</a></li>
+  <li><a href="#research-plan" id="toc-research-plan" class="nav-link" data-scroll-target="#research-plan"><span class="header-section-number">2.2</span> Research plan</a></li>
+  <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Yangyi-Zhang/smoking/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/Yangyi-Zhang/smoking/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -167,11 +202,274 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="description" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+</div>
+<section id="technical-description" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="technical-description"><span class="header-section-number">2.1</span> Technical Description</h2>
+<p>In this project we download data from <a href="https://wwwn.cdc.gov/nchs/nhanes/search/default.aspx">CDC-National Health and Nutrition Examination Survey(NHANES)</a>. This dataset is constructed by CDC, Centers for Disease Control and Prevention. NHANES is a major project of the National Center for Health Statistics (part of the CDC), and became a continuous project since 1999. The survey upadtes every year and contains records from 5000 people national wide.</p>
+<p>We focus on the three questionnaire: <a href="https://wwwn.cdc.gov/Nchs/Nhanes/Search/DataPage.aspx?Component=Questionnaire&amp;Cycle=2017-2020">Smoking - Cigarette Use</a>, <a href="https://wwwn.cdc.gov/Nchs/Nhanes/Search/DataPage.aspx?Component=Questionnaire&amp;Cycle=2017-2020">Smoking - Household Smokers</a>, and <a href="https://wwwn.cdc.gov/Nchs/Nhanes/Search/DataPage.aspx?Component=Questionnaire&amp;Cycle=2017-2020">Medical Conditions</a>. Due to the Covid-19, data from cycle 2019-2020 is not completed and thus the department combine 2017-2018 with 2019-2020 to form a new version of data from 2017-2020, which is the latest version of data. We use this cycle given the great amount of records it provides.</p>
+<p>This is how the data looks like:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>households <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/households.XPT'</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'SMD470'</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>medical <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/medical.XPT'</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'MCQ010'</span>, <span class="st">'MCQ092'</span>, <span class="st">'MCQ160A'</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160C'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ160F'</span>, <span class="st">'MCQ160M'</span>, <span class="st">'MCQ160P'</span>, <span class="st">'MCQ160L'</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ550'</span>, <span class="st">'MCQ560'</span>, <span class="st">'MCQ220'</span>))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>smoke <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/smoke.XPT'</span>, </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'SMQ020'</span>, <span class="st">'SMQ040'</span>, <span class="st">'SMD650'</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'SMD100FL'</span>, <span class="st">'SMQ621'</span>))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">merge</span>(households, smoke, <span class="at">by =</span> <span class="st">'SEQN'</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">merge</span>(data, medical, <span class="at">by =</span> <span class="st">'SEQN'</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    SEQN SMD470 SMQ020 SMQ040 SMD650 SMD100FL SMQ621 MCQ010 MCQ092 MCQ160A
+1 109264     NA     NA     NA     NA       NA      1      2      2      NA
+2 109266     NA      2     NA     NA       NA     NA      2      9       2
+3 109267     NA      2     NA     NA       NA     NA      2      2       2
+4 109268     NA      2     NA     NA       NA     NA      2      2      NA
+5 109271      2      1      1     20       NA     NA      1      2       1
+6 109273      0      1      1     15        1     NA      2      2       2
+  MCQ160B MCQ160C MCQ160D MCQ160E MCQ160F MCQ160M MCQ160P MCQ160L MCQ550 MCQ560
+1      NA      NA      NA      NA      NA      NA      NA      NA     NA     NA
+2       2       2       2       2       2       2       2       2      2      2
+3       2       2       2       2       2       2       2       2      2      2
+4      NA      NA      NA      NA      NA      NA      NA      NA     NA     NA
+5       2       2       2       2       2       2       1       2      2      2
+6       2       2       2       2       2       2       2       2      2      2
+  MCQ220
+1     NA
+2      2
+3      2
+4     NA
+5      2
+6      2</code></pre>
+</div>
+</div>
+<p>The Description of each variable is as below:</p>
+<div class="cell" data-warnings="false">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th>Index</th>
+<th style="text-align: left;">Variable Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SEQN</td>
+<td style="text-align: left;">Respondent sequence number</td>
+</tr>
+<tr class="even">
+<td>SMD470</td>
+<td style="text-align: left;"># of people who smoke inside this home</td>
+</tr>
+<tr class="odd">
+<td>SMQ020</td>
+<td style="text-align: left;">Smoked at least 100 cigarettes in life</td>
+</tr>
+<tr class="even">
+<td>SMQ040</td>
+<td style="text-align: left;">Do you now smoke cigarettes?</td>
+</tr>
+<tr class="odd">
+<td>SMD650</td>
+<td style="text-align: left;">Avg # cigarettes/day during past 30 days</td>
+</tr>
+<tr class="even">
+<td>SMD100FL</td>
+<td style="text-align: left;">Cigarette Filter type</td>
+</tr>
+<tr class="odd">
+<td>SMQ621</td>
+<td style="text-align: left;">Cigarettes smoked in entire life</td>
+</tr>
+<tr class="even">
+<td>MCQ010</td>
+<td style="text-align: left;">Ever been told you have asthma</td>
+</tr>
+<tr class="odd">
+<td>MCQ092</td>
+<td style="text-align: left;">Ever receive blood transfusion</td>
+</tr>
+<tr class="even">
+<td>MCQ160A</td>
+<td style="text-align: left;">Doctor ever said you had arthritis</td>
+</tr>
+<tr class="odd">
+<td>MCQ160B</td>
+<td style="text-align: left;">Ever told had heart failure</td>
+</tr>
+<tr class="even">
+<td>MCQ160C</td>
+<td style="text-align: left;">Ever told had coronary heart disease</td>
+</tr>
+<tr class="odd">
+<td>MCQ160D</td>
+<td style="text-align: left;">Ever told had angina/angina pectoris</td>
+</tr>
+<tr class="even">
+<td>MCQ160E</td>
+<td style="text-align: left;">Ever told had heart attack</td>
+</tr>
+<tr class="odd">
+<td>MCQ160F</td>
+<td style="text-align: left;">Ever told you had a stroke</td>
+</tr>
+<tr class="even">
+<td>MCQ160M</td>
+<td style="text-align: left;">Ever told you had thyroid problem</td>
+</tr>
+<tr class="odd">
+<td>MCQ160P</td>
+<td style="text-align: left;">Ever told you had COPD, emphysema, ChB</td>
+</tr>
+<tr class="even">
+<td>MCQ160L</td>
+<td style="text-align: left;">Ever told you had any liver condition</td>
+</tr>
+<tr class="odd">
+<td>MCQ550</td>
+<td style="text-align: left;">Has DR ever said you have gallstones</td>
+</tr>
+<tr class="even">
+<td>MCQ560</td>
+<td style="text-align: left;">Ever had gallbladder surgery</td>
+</tr>
+<tr class="odd">
+<td>MCQ220</td>
+<td style="text-align: left;">Ever told you had cancer or malignancy</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We would like to use SMQ020-SMQ621 to reflect the personal smoking status and MCQ010-MCQ220 to indicate the personal health status, which contains doctor diagnoses to diverse types of diseases. We would also like to include SMD470 as a reflect of secondhand smoke exposure to find if there is any possibility that secondhand smoke exposure has effect to health.</p>
 </section>
-<section id="missing-value-analysis" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
+<section id="research-plan" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="research-plan"><span class="header-section-number">2.2</span> Research plan</h2>
+<p>We would like to start with a classic question: the effect of smoking to health. This question has been studied for years and has several well-known results like smoking will increase the risk for lung cancer. In out study, we would like examine the influence of smoking to health condition comprehensively, including its effect to heart, liver, etc. We are especially interested in discovering the relation between smoking to health problems that are not thought to be related to smoking in general.</p>
+<p>To achieve this goal, we would like to use various visualization method including mosaic plot and histogram by condition to see if there are any apparant relations. We also want to use pearson correlation with heatmap visualization to measure the relation between smoking to different health benchmarks.</p>
+<p>After this, we plan to find the effect of secondhand smoke exposure to health conditions. Secondhand smoke exposure is nowadays a common phenomenon, but people tend to oversee this problem compared to the direct influence by cigarette. Therefore, we would like to repeat the procedure as before but change the smoking variable to secondhand smoke exposure to find its possible effect to one’s health condition.</p>
+</section>
+<section id="missing-value-analysis" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</h2>
+<p>This number of missing values for each variable is as below:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>missing <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"key"</span>, <span class="at">value =</span> <span class="st">"val"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">is.missing =</span> <span class="fu">is.na</span>(val)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(key, is.missing) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">num.missing =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(is.missing<span class="sc">==</span>T) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>is.missing) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(num.missing)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">num.contain =</span> count <span class="sc">-</span> num.missing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'key'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+</div>
+<p>We use a histogram and pie charts to visualize the missing values:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(missing) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> key, <span class="at">y =</span> num.missing), <span class="at">stat =</span> <span class="st">'identity'</span>) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'variables'</span>, <span class="at">y =</span> <span class="st">'count of missing values'</span>, <span class="at">title =</span> <span class="st">'Bar plot of missing values'</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="data_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">length</span>(missing<span class="sc">$</span>num.missing)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pie <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">'value'</span> <span class="ot">=</span> <span class="fu">c</span>(missing<span class="sc">$</span>num.missing, missing<span class="sc">$</span>num.contain),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'category'</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">'miss'</span>, count), <span class="fu">rep</span>(<span class="st">'contain'</span>, count)),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'variable'</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(missing<span class="sc">$</span>key, <span class="dv">2</span>)))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pie, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> value, <span class="at">fill =</span> category)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">'y'</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable) <span class="sc">+</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>, <span class="at">title =</span> <span class="st">'Pie charts of missing values'</span>) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid  =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="data_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that there are a fixed number of missing values for a bunch of medical variables (MCQ160A - MCQ220). Since we have about 10k data in total and 1905 is not a big number, we choose to delete these records.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="fu">c</span>(<span class="st">'MCQ160A'</span>, <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160C'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>, <span class="st">'MCQ160F'</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'MCQ160M'</span>, <span class="st">'MCQ160P'</span>, <span class="st">'MCQ160L'</span>, <span class="st">'MCQ550'</span>, <span class="st">'MCQ560'</span>, <span class="st">'MCQ220'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Regarding the smoking status variables, we decide to drop SMD650, SMD100FL, and SMQ621 variables since there are too many missing values. For the rest of the data we drop any row contain NAs.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">'SMD650'</span>, <span class="st">'SMD100FL'</span>, <span class="st">'SMQ621'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    SEQN SMD470 SMQ020 SMQ040 MCQ010 MCQ092 MCQ160A MCQ160B MCQ160C MCQ160D
+1 109271      2      1      1      1      2       1       2       2       2
+2 109273      0      1      1      2      2       2       2       2       2
+3 109307      0      1      3      2      2       2       2       2       1
+4 109323      0      1      3      2      2       2       2       2       2
+5 109334      0      1      1      2      2       2       2       2       2
+6 109342      2      1      1      2      2       1       2       2       2
+  MCQ160E MCQ160F MCQ160M MCQ160P MCQ160L MCQ550 MCQ560 MCQ220
+1       2       2       2       1       2      2      2      2
+2       2       2       2       2       2      2      2      2
+3       2       2       2       2       2      2      2      2
+4       2       2       2       2       2      2      2      2
+5       2       2       2       2       2      2      2      2
+6       2       2       1       2       2      2      1      2</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">'There are '</span>, <span class="fu">nrow</span>(data), <span class="st">' records in total.'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "There are  1829  records in total."</code></pre>
+</div>
+</div>
+<p>The result data looks clean now. We have 1829 records in total, which is a sufficient amount.</p>
 
 
 </section>
