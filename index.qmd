@@ -1,1 +1,19 @@
 # Introduction
+
+The study is motivated by researchers’ interest in the potential association between smoking and health-related issues. The Surgeon General’s report - Smoking and Health - in 1964 is one of the earliest official report on the health consequences of smoking in the United States [1]. In this report, well-known health risks associated with smoking, for example, lung cancer, coronary heart disease, and emphysema. The study has shaped public attitude and policy regarding smoking. In 1969, advertising for cigarette on television and radio was banned. Researches have been conducted on the 50 years after the report, further suggesting tobacco-use has a positive correlation with heart disease, stroke, and lung cancer [2]. 
+
+The Coronavirus Disease 2019 (COVID‐19) is another landmark event on the history of human health. While smoking compromises lung function, the COVID-19 also primarily affects the lungs [3]. According to WTO, smokers are more vulnerable to the pandemics than non-smokers.
+
+How does the health risks associated with smoking changed, beside diseases related to lung? In this research, we will study the household smoking data collected before and during the COVID-19 pandemics, which will help us to identify latest health risks associated with smoking and hint on the pandemics’ impact on smoking issues.
+
+Throughout this study, our majority concern is to identify health-condition issues associated with smoking during the COVID-19 pandemics and to assess potential shifts in the smoking-caused health issues during the pandemics by comparing our observations with previous study [2]. To make the comparison fair, we consider only data collected in the United States, as used in the previous study.
+
+
+
+## Reference: 
+
+1. “The 1964 Report on Smoking and Health | Reports of the Surgeon General - Profiles in Science.” U.S. National Library of Medicine. Accessed November 30, 2023. https://profiles.nlm.nih.gov/spotlight/nn/feature/smoking.
+
+2. The Health Consequences of Smoking—50 Years of Progress: A Report of the Surgeon General. Atlanta (GA): Centers for Disease Control and Prevention (US); 2014.Available from: https://www.ncbi.nlm.nih.gov/books/NBK179276/
+
+3. “Coronavirus Disease (Covid-19): Tobacco.” World Health Organization. Accessed November 30, 2023. https://www.who.int/news-room/questions-and-answers/item/coronavirus-disease-covid-19-tobacco. 
