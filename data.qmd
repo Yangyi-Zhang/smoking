@@ -1,4 +1,4 @@
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warnings=FALSE}
 #load important packages
 library(haven)
 library(ggplot2)
@@ -18,7 +18,7 @@ We focus on the three questionnaire: [Smoking - Cigarette Use](https://wwwn.cdc.
 
 This is how the data looks like: 
 
-```{r}
+```{r echo=FALSE, warnings=FALSE}
 #read data
 households <- read_xpt('data/households.XPT', 
                        col_select = c('SEQN', 'SMD470'))
@@ -80,7 +80,7 @@ After this, we plan to find the effect of secondhand smoke exposure to health co
 
 This number of missing values for each variable is as below: 
 
-```{r}
+```{r message=FALSE, warnings=FALSE}
 count <- nrow(data)
 missing <- data %>%
     gather(key = "key", value = "val") %>%
@@ -130,9 +130,9 @@ data <- data %>%
   drop_na()
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE, warnings=FALSE}
 head(data)
-print(paste('There are ', nrow(data), ' records in total.'))
+# print(paste('There are ', nrow(data), ' records in total.'))
 ```
 
 The result data looks clean now. We have 1829 records in total, which is a sufficient amount.
