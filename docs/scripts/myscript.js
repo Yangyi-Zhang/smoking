@@ -2,8 +2,7 @@
 
   const w = 400;
   const h = 300;
-  const margin = {top: 25, right: 0, bottom: 25,
-      left: 25};
+  const margin = {top: 20, right: 30, bottom: 30, left: 30 };
   const innerWidth = w - margin.left - margin.right;
   const innerHeight = h - margin.top - margin.bottom;
 
@@ -19,15 +18,14 @@
       .attr("height", h)
       .attr("fill", "lightblue");
 
-  const bardata = [300, 100, 150, 220, 70, 270];
+  const data = [18.1, 17.8, 16.8, 15.1, 15.5, 14.0, 13.7];
 
   const xScale = d3.scaleBand()
-      .domain(d3.range(bardata.length))
-      .range([0, innerWidth])
-      .paddingInner(.1);
+      .domain(d3.range([data.length]))
+      .range([0,innerWidth]);
 
   const yScale = d3.scaleLinear()
-      .domain([0, d3.max(bardata)])
+      .domain([0, d3.max(data)])
       .range([innerHeight, 0])
 
   const xAxis = d3.axisBottom()
@@ -40,14 +38,14 @@
       .attr("id", "plot")
       .attr("transform", `translate (${margin.left}, ${margin.top})`)
     .selectAll("rect")
-      .data(bardata);
+      .data(data);
 
   bars.enter().append("rect")
       .attr("x", (d, i) => xScale(i))
       .attr("y", d => yScale(d))
       .attr("width", xScale.bandwidth())
       .attr("height", d => innerHeight - yScale(d))
-      .attr("fill", "green");
+      .attr("fill", "steelblue");
 
   svg.append("g")
       .attr("class", "xAxis")
@@ -77,7 +75,7 @@
       .attr("y", d => yScale(d))
       .attr("width", xScale.bandwidth())
       .attr("height", d => innerHeight - yScale(d))
-      .attr("fill", "green");
+      .attr("fill", "steelblue");
 
     bars.exit().remove();
 
@@ -91,12 +89,15 @@
 
 
     function add() {
-      var newvalue = Math.floor(Math.random()*400);
-      bardata.push(newvalue);
-      update(bardata);
+      var left = Math.floor(Math.random()*data.length);
+      var right = left + Math.floor(Math.random()*(data.length-left));
+      var newvalue = data[data.length-1] + (data[right] - data[left]);
+      data.push(newvalue);
+      update(data);
     }
 
     function remove() {
-      bardata.pop();
-      update(bardata);
+      data.pop();
+      update(data);
       };
+

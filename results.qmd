@@ -118,7 +118,7 @@ vcd::mosaic(Disease ~ smoke_freq+smoker_in_house,
 
 A faceted mosaic plot is drawn to study the data proportions for each disease and to check whether Simpson's paradox exists. From the plots, we observe that daily smokers and non-smokers have the highest proportion of having diseases. On MCQ160P, daily smokers take a greater proportion of people having disease; on MCQ220 and MCQ550, non-smokers are the majority. Also, a larger proportion of respondents in households with one or more smokers have disease, in comparison with the proportion of respondents in households with no smoker. The previous observations are generally supported, so the Simpson's paradox does not exist.
 
-The faceted plot provide additional insights on each disease. For example a small proportion of respondents have MCQ160C, and little variation is observed from group to group. Therefore, MCQ160C may not have a significant association with smoking exposure.
+The faceted plot provide additional insights on each disease. For example a small proportion of respondents have MCQ160C, and little variation is observed from group to group. Therefore, MCQ160C may not have a significant association with smoking exposure. 
 ```{r mosaic plot facet on disease, echo=FALSE, message=FALSE, warnings=FALSE}
 ggplot(data=data2) +
   geom_mosaic(aes(x=product(smoke_freq,smoker_in_house), fill=Disease)) +
