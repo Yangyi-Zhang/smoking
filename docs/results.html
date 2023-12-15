@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -138,7 +172,18 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#alluvium-plot" id="toc-alluvium-plot" class="nav-link active" data-scroll-target="#alluvium-plot"><span class="header-section-number">3.1</span> Alluvium plot</a></li>
+  <li><a href="#mosaic-plot" id="toc-mosaic-plot" class="nav-link" data-scroll-target="#mosaic-plot"><span class="header-section-number">3.2</span> Mosaic plot</a>
+  <ul class="collapse">
+  <li><a href="#general-mosaic-plot" id="toc-general-mosaic-plot" class="nav-link" data-scroll-target="#general-mosaic-plot"><span class="header-section-number">3.2.1</span> General Mosaic plot</a></li>
+  <li><a href="#mosaic-plot-for-each-disease" id="toc-mosaic-plot-for-each-disease" class="nav-link" data-scroll-target="#mosaic-plot-for-each-disease"><span class="header-section-number">3.2.2</span> Mosaic plot for each disease</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Yangyi-Zhang/smoking/edit/main/results.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/Yangyi-Zhang/smoking/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -160,8 +205,312 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'GGally'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggmosaic':
+
+    happy</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'zoo'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric</code></pre>
+</div>
+</div>
+<p>In the Results section, we explore data visualization with the Alluvium plot, Mosaic plot (general, faceted), Stack-bar plot (count and proportion), and Cleveland-dot plot. We then analyze the data from various aspects, as different information has been provided by each plot.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 1829 Columns: 13
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (13): SEQN, SMD470, SMQ040, MCQ010, MCQ092, MCQ160A, MCQ160C, MCQ160F, M...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<section id="alluvium-plot" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="alluvium-plot"><span class="header-section-number">3.1</span> Alluvium plot</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot longer</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(data2, <span class="fu">c</span>(smoke_freq,smoker_in_house), <span class="at">names_to =</span> <span class="st">'Smoking_exposure_type'</span>, <span class="at">values_to =</span> <span class="st">'Smoking_exposure'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> data3 <span class="sc">%&gt;%</span> <span class="fu">mutate_at</span>(<span class="fu">colnames</span>(data3)[<span class="dv">12</span><span class="sc">:</span><span class="dv">13</span>], as.factor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We visualize two Alluvium plot2, where the flows are the two independent features - smoking frequency and number of household smoker - relatively. While the two panels has different stratas that represent each independent feature on the first axis, they share the remaining sets of axes, each representing a disease potentially associated with smoking exposure. These shared axes each describes a health condition, where “1” stands for “has the specified disease”, “2” stands for “no”, and “9” stands for “unknown.”</p>
+<p>From the visual, we can see the majority respondent smokes daily, and the majority household has zero smoker. These two findings do not contradict since the household smoker number does not include the respondent.</p>
+<p>The flow patterns for the two independent features are visually similar yet provide different information. From the upper panel, we observe that the majority respondent - the daily smokers, casual smokers, and non-smokers - do not have any disease, and only a few people answers ‘unknown’ toward their health condition. Most people having one disease does not have a second disease. Most people having disease are daily smokers, or, surprisingly, non-smokers.</p>
+<p>From the lower panel, we observe that the majority household has no smoker (exclude respondent). A larger proportion of respondents in households with one or more smokers have disease, comparing to that of respondents in households with no smoker.</p>
+<p>We can also see whether people having one disease have other diseases by tracing the flows. However, we will not discuss the findings here since the study focuses on the health concern associates with smoking.</p>
+<p>While the alluvium allows us to trace the flows, the plot becomes complicated since we have too many features. We will explore other visuals to have a more thorough view of the case.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#knitr::opts_chunk$set(fig.width=14, fig.height = 20)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(data3), </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">axis1=</span>Smoking_exposure, <span class="at">axis2=</span>MCQ010, <span class="at">axis3=</span>MCQ092,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">axis4=</span>MCQ160A, <span class="at">axis5=</span>MCQ160C, <span class="at">axis6=</span>MCQ160F, <span class="at">axis7=</span>MCQ160M,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">axis8=</span>MCQ160P, <span class="at">axis9=</span>MCQ160L, <span class="at">axis10=</span>MCQ550, <span class="at">axis11=</span>MCQ220)) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill=</span>data3<span class="sc">$</span>Smoking_exposure), <span class="at">width=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">width=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>, <span class="at">fill=</span><span class="st">'grey80'</span>, <span class="at">color=</span><span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">stat=</span><span class="st">'stratum'</span>, <span class="fu">aes</span>(<span class="at">label=</span><span class="fu">after_stat</span>(stratum))) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="st">"Exposure"</span>, <span class="st">"MCQ010"</span>, <span class="st">"MCQ092"</span>, </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"MCQ160A"</span>, <span class="st">"MCQ160C"</span>, <span class="st">"MCQ160F"</span>, <span class="st">"MCQ160M"</span>, </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"MCQ160P"</span>, <span class="st">"MCQ160L"</span>, <span class="st">"MCQ550"</span>, <span class="st">"MCQ220"</span>), </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">expand=</span><span class="fu">c</span>(<span class="fl">0.05</span>,<span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type=</span><span class="st">'qual'</span>, <span class="at">palette=</span><span class="st">'Set1'</span>) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(data3<span class="sc">$</span>Smoking_exposure_type, <span class="at">space=</span><span class="st">'free'</span>) <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="fu">guide_legend</span>(<span class="at">ncol=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill=</span><span class="st">"Exposure type"</span>) <span class="sc">+</span> </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Smoking exposure and health condition"</span>) <span class="sc">+</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">#legend.position = "bottom",</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/alluvium-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="mosaic-plot" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="mosaic-plot"><span class="header-section-number">3.2</span> Mosaic plot</h2>
+<p>In the mosaic plot, we study the relationship among the two independent features and the dependent feature: health condition, represented by medical history associated with ten diseases. We plot all diseases as one feature on the first, general plot and study each separately with facet on the second plot.</p>
+<section id="general-mosaic-plot" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="general-mosaic-plot"><span class="header-section-number">3.2.1</span> General Mosaic plot</h3>
+<p>The general mosaic plot supports previous observations and provides additional information on the proportion of data in groups. Since the ten dependent disease features share the same set of labels, we combine them into a general health-condition feature, where “yes” stands for “having disease”, “no” for “not having disease”, and “unk” for “not knowing if having disease.” The modified data reflects the true proportion of health condition since the total number of observations for each disease feature is the same.</p>
+<p>From the general mosaic, we conclude that the majority respondent have no disease. Among respondents who have diseases, most people are daily smokers, or have one smoker (not including the respondent) at home.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#BC8F6F"</span>,<span class="st">"#F5DEB9"</span>, <span class="st">"#87CEEB"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>vcd<span class="sc">::</span><span class="fu">mosaic</span>(Disease <span class="sc">~</span> smoke_freq<span class="sc">+</span>smoker_in_house, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">data=</span>data2, <span class="at">direction=</span><span class="fu">c</span>(<span class="st">"v"</span>,<span class="st">"v"</span>,<span class="st">"h"</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">rot_labels=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">45</span>, <span class="dv">0</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">spacing_args =</span> <span class="fu">list</span>(<span class="fl">0.2</span>),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">highlighting_fill =</span> colors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/mosaic general-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="mosaic-plot-for-each-disease" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="mosaic-plot-for-each-disease"><span class="header-section-number">3.2.2</span> Mosaic plot for each disease</h3>
+<p>A faceted mosaic plot is drawn to study the data proportions for each disease and to check whether Simpson’s paradox exists. From the plots, we observe that daily smokers and non-smokers have the highest proportion of having diseases. On MCQ160P, daily smokers take a greater proportion of people having disease; on MCQ220 and MCQ550, non-smokers are the majority. Also, a larger proportion of respondents in households with one or more smokers have disease, in comparison with the proportion of respondents in households with no smoker. The previous observations are generally supported, so the Simpson’s paradox does not exist.</p>
+<p>The faceted plot provide additional insights on each disease. For example a small proportion of respondents have MCQ160C, and little variation is observed from group to group. Therefore, MCQ160C may not have a significant association with smoking exposure.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>data2) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">product</span>(smoke_freq,smoker_in_house), <span class="at">fill=</span>Disease)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">aspect.ratio =</span> <span class="dv">1</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">70</span>, <span class="at">size=</span><span class="dv">6</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>data2<span class="sc">$</span>Disease_type, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Mosaic plot on smoking exposure v.s. disease"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `unite_()` was deprecated in tidyr 1.2.0.
+ℹ Please use `unite()` instead.
+ℹ The deprecated feature was likely used in the ggmosaic package.
+  Please report the issue at &lt;https://github.com/haleyjeppson/ggmosaic&gt;.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/mosaic plot facet on disease-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>##Bar-chart facet by types of diseases</p>
+<p>In this part, we analyze the possible influence of smoking exposure to having certain disease. The smoking exposure is divided to smoking frequency and secondhand smoking exposure.</p>
+<p>###Smoking frequency</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#seperate smoking frequency and secondhand smoking exposure data</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pivot longer using disease types</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>data_direct <span class="ot">=</span> <span class="fu">filter</span>(data3, Smoking_exposure_type <span class="sc">==</span> <span class="st">'smoke_freq'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>data_direct <span class="ot">=</span> <span class="fu">subset</span>(data_direct, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(Smoking_exposure_type))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>data_direct <span class="ot">=</span> <span class="fu">pivot_longer</span>(data_direct, MCQ010<span class="sc">:</span>MCQ220, <span class="at">names_to =</span> <span class="st">'Disease_type'</span>, <span class="at">values_to =</span> <span class="st">'Disease'</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>data_second <span class="ot">=</span> <span class="fu">filter</span>(data3, Smoking_exposure_type <span class="sc">==</span> <span class="st">'smoker_in_house'</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>data_second <span class="ot">=</span> <span class="fu">subset</span>(data_second, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(Smoking_exposure_type))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>data_second <span class="ot">=</span> <span class="fu">pivot_longer</span>(data_second, MCQ010<span class="sc">:</span>MCQ220, <span class="at">names_to =</span> <span class="st">'Disease_type'</span>, <span class="at">values_to =</span> <span class="st">'Disease'</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_direct, <span class="fu">aes</span>(<span class="at">fill=</span>Disease, <span class="at">x=</span>Smoking_exposure)) <span class="sc">+</span> </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">'stack'</span>) <span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Disease_type) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Count'</span>, <span class="at">y =</span> <span class="st">'Smoking Frequency'</span>, <span class="at">title =</span> <span class="st">'Stacked Bar-chart: Smoking Frequency'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/bar chart facet by disease types 1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We focus on the influence of smoking frequency to the probability of having certain disease. We find that the influence of smoking is especially noticeable for MCQ010-asthma, MCQ160A-arthritis, and MCQ160P-COPD, emphysema, ChB. For these three categories, the number of respondents smoke daily and have had the disease is much higher than the number of respondents do not smoke daily and have had the disease.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#bar chart</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_direct, <span class="fu">aes</span>(<span class="at">fill=</span>Disease, <span class="at">x=</span>Smoking_exposure)) <span class="sc">+</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">'fill'</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Disease_type) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Count'</span>, <span class="at">y =</span> <span class="st">'Smoking Member in House'</span>, <span class="at">title =</span> <span class="st">'Stacked Bar-chart in Proprtion: Smoking Frequency'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/bar chart facet by disease types proportion 1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We regenerate the bar chart and set the y-axis scale as proportion. This will eliminate the disturbing of the imbalanced data (the number of people smoking daily in this survey is much higher than the number of respondents smoking sometimes or no). According to the stacked bar-chart, the proportion of getting MCQ160P-COPD, emphysema, ChB, is higher for the group of respondents smoking daily. We thus conclude that smoking frequency has positive effect to the probability of gettingCOPD, emphysema, and ChB.</p>
+<p>###Secondhand smoking exposure</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#bar chart</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_second, <span class="fu">aes</span>(<span class="at">fill=</span>Disease, <span class="at">x=</span>Smoking_exposure)) <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">'stack'</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Disease_type) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Count'</span>, <span class="at">y =</span> <span class="st">'Smoking Member in House'</span>, <span class="at">title =</span> <span class="st">'Stacked Bar-chart: Secondhand Smoking Exposure'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/bar chart facet by disease types 2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We focus on the influence of secondhand smoking exposure to the probability of having certain disease. The secondhand smoking exposure is measure by the reported number of respondents smoking at home. We find that the influence of secondhand smoking exposure is noticeable for MCQ010-asthma, MCQ160A-arthritis, MCQ160P-COPD, emphysema, ChB, and MCQ220-cancer or malignancy. For these three categories, the number of respondents have had the disease and one or more family members smoke at home is much higher than the number of respondents have had the disease and zero family member smoke at home.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#bar chart</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_second, <span class="fu">aes</span>(<span class="at">fill=</span>Disease, <span class="at">x=</span>Smoking_exposure)) <span class="sc">+</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">'fill'</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Disease_type) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Count'</span>, <span class="at">y =</span> <span class="st">'Smoking Member in House'</span>, <span class="at">title =</span> <span class="st">'Stacked Bar-chart in Proportion: Secondhand Smoking Exposure'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/bar chart facet by disease types proportion 2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We regenerate the bar chart and set the y-axis scale as proportion as before. According to the stacked bar-chart, the proportion of getting MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB, are much higher for the group of respondents that one or more family members smoke at home. For other diseases, there are also small increasings in proportions when comparing the group of respondents that one or more family members smoke at home with the group of respondents that have zero family members smoke at home. We thus conclude that secondhand exposure will increase the probability of getting disease in general, and is especially influential to arthritis and COPD, emphysema, ChB.</p>
+<p>##Cleveland dot plot</p>
+<p>We use two Cleveland Dot plots to visualize the influence of smoking exposure to probability of getting difference diseases by summarizing the count of respondents having and not having disease for each disease and smoking exposure groups. The Cleveland Dot plot allows us to visualize the differences in number of answers among different diseases categories.</p>
+<p>###Smoking frequency</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data_direct <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Disease_type, Disease, Smoking_exposure) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> Disease_type)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Smoking_exposure) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Count'</span>, <span class="at">y =</span> <span class="st">'Disease type'</span>, <span class="at">title =</span> <span class="st">'Cleveland Dot: Smoking Frequency'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/cleveland dot plot 1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that the number of answer ‘yes’ in MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of respondents smoking daily. For MCQ160A, the proportion of ‘yes’ is high for all three smoking exposure groups, whereas for MCQ160P, the proportion of ‘yes’ is high only for the group of respondents smoking daily. Thus we make conclusion that probability of getting MCQ160P-COPD, emphysema, ChB will be influenced by smoking frequency. This conclusion is consistent with the conclusion from Bar-chart.</p>
+<p>###Secondhand smoking exposure</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_second <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Disease_type, Disease, Smoking_exposure) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> Disease_type)) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Smoking_exposure) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Count'</span>, <span class="at">y =</span> <span class="st">'Disease type'</span>, <span class="at">title =</span> <span class="st">'Cleveland Dot: Secondhand Smoking Exposure'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Scale for fill is already present.
+Adding another scale for fill, which will replace the existing scale.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/cleveland dot plot 2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that the number of answer ‘yes’ in MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of respondents that there is one or more family member smoking at home. Besides, the proportion of ‘yes’ is higher compared to the group of respondents that there is zero family member smoking at home for MCQ160P. Thus we make conclusion that probability of getting MCQ160P-COPD, emphysema, ChB will be influenced by secondhand exposure. This conclusion is consistent with the conclusion from Bar-chart, but it is not clear that whether there is a general influence of secondhand exposure to probability of getting disease by analyzing this Clevelard dot plot.</p>
+<p>##Bar-chart facet by smoking Eeposure</p>
+<p>Similar to Cleveland Dotplot, we want to compare the influence between different diseases using horizontal bar-charts where x-axis represents the proportion of the response to every disease.</p>
+<p>###Smoking frequency</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_direct, <span class="fu">aes</span>(<span class="at">fill=</span>Disease, <span class="at">x=</span>Disease_type)) <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">'fill'</span>) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Smoking_exposure, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Disease type'</span>, <span class="at">y =</span> <span class="st">'Proportion'</span>, <span class="at">title =</span> <span class="st">'Bar-chart: Smoking Frequency'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/bar chart facet by smoking exposure 1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that the proportion of answer ‘yes’ in MCQ010-asthm, MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of people smoking daily. For MCQ010 and MCQ160A, the proportion of ‘yes’ is high for all three smoking exposure groups, whereas for MCQ160P, the proportion of ‘yes’ is high only for the group of respondents smoking daily. Thus we make conclusion that probability of getting MCQ160P-COPD, emphysema, ChB will be influenced by smoking frequency. This conclusion is consistent with the conclusion from Clevelard dot plot.</p>
+<p>###Secondhand smoking exposure</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_second, <span class="fu">aes</span>(<span class="at">fill=</span>Disease, <span class="at">x=</span>Disease_type)) <span class="sc">+</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">'fill'</span>) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Smoking_exposure, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Disease type'</span>, <span class="at">y =</span> <span class="st">'Proportion'</span>, <span class="at">title =</span> <span class="st">'Bar-chart: Secondhand Smoking Exposure'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/bar chart facet by smoking exposure 2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that the proportion of answer ‘yes’ in MCQ010-asthm, MCQ160A-arthritis, and MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of respondents that there is one family member smoke at home. For MCQ160A and MCQ160P, the proportion of ‘yes’ is higher compared to the group of respondents that there is zero family member smoke at home. Thus we make conclusion that probability of getting MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB will be influenced by smoking frequency. This conclusion is consistent with the conclusion from the bar-charts facet by disease types.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -417,7 +766,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Yangyi-Zhang/smoking/edit/main/results.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/Yangyi-Zhang/smoking/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    </div>
     <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
   </div>
 </footer>

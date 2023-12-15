@@ -4,6 +4,8 @@ library(haven)
 library(ggplot2)
 library(tidyr)
 library(dplyr)
+library(reshape2)
+library(readr)
 ```
 
 # Data
@@ -134,3 +136,51 @@ print(paste('There are ', nrow(data), ' records in total.'))
 ```
 
 The result data looks clean now. We have 1829 records in total, which is a sufficient amount.
+
+## Feature Selection
+
+After treating missing values, we examine the real-life significance of columns and their correlation values, drop the following columns from the data, thus to prevent information overlapping among columns:
+
+- SMQ020: Smoked at least 100 cigarettes in life. The answer is 'yes' for everyone who smoke, according to the data.
+- MCQ160B: Ever told had heart failure. The four hear-related diseases has the same possible levels and similar distribution. After checking the correlation between each feature and the independent features (explained below), we drop MCQ160B, MCQ160D and MCQ160E and keep MCQ160C.
+- MCQ160D: Ever told had angina/angina pectoris. Angina pectoris is the chest pain caused by insufficient blood and oxygen suppliant to heart and is associated with coronary heart disease (MCQ160C).
+- MCQ160E: Ever told had heart attack. Same reason as MCQ160B.
+- MCQ560: Ever had gallbladder surgery. This feature is included in MCQ550, 'Has DR ever said you have gallstones', and the two features have almost the same distribution.
+
+
+| Index | Variable Description After Preprocessing and Selection |
+|--------|:----------|
+| SEQN | Respondent sequence number |
+| SMD470 | # of people who smoke inside this home |
+| SMQ040 | Do you now smoke cigarettes? |
+| MCQ010 | Ever been told you have asthma |
+| MCQ092 | Ever receive blood transfusion |
+| MCQ160A | Doctor ever said you had arthritis |
+| MCQ160C | Ever told had coronary heart disease |
+| MCQ160F | Ever told you had a stroke |
+| MCQ160M | Ever told you had thyroid problem |
+| MCQ160P | Ever told you had COPD, emphysema, ChB |
+| MCQ160L | Ever told you had any liver condition |
+| MCQ550 | Has DR ever said you have gallstones |
+| MCQ220 | Ever told you had cancer or malignancy |
+
+```{r, drop features}
+data <- data %>%
+  select(-c('SMQ020', 'MCQ160B', 'MCQ160D', 'MCQ160E', 'MCQ560'))
+write_csv(data, 'data/data.csv')
+```
+
+As shown in the correlation heatmap below, after feature selection, no feature pair exhibits high correlation that may result in multi-collinearity or information overlapping.
+
+```{r heatmap after selection}
+cormat <- round(cor(data[, 2:13]),2)
+ggplot(data = melt(cormat), aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'variables', y = 'variables', title = 'Correlation Heatmap')
+```
+
+## Identifying Dependency
+
+In this study, we consider the conditions of smoking (SMD470, SMQ040) - number of people who smoke in the household and whether the questionnaire-respondent smoke - as the independent features. SEQN, the respondent sequence number, or ID, doesn't hold statistical meaning. The remaining ten features that describe health condition are considered dependent features.
+

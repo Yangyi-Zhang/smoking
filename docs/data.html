@@ -179,6 +179,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#technical-description" id="toc-technical-description" class="nav-link active" data-scroll-target="#technical-description"><span class="header-section-number">2.1</span> Technical Description</a></li>
   <li><a href="#research-plan" id="toc-research-plan" class="nav-link" data-scroll-target="#research-plan"><span class="header-section-number">2.2</span> Research plan</a></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a></li>
+  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection"><span class="header-section-number">2.4</span> Feature Selection</a></li>
+  <li><a href="#identifying-dependency" id="toc-identifying-dependency" class="nav-link" data-scroll-target="#identifying-dependency"><span class="header-section-number">2.5</span> Identifying Dependency</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Yangyi-Zhang/smoking/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/Yangyi-Zhang/smoking/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -217,6 +219,15 @@ Attaching package: 'dplyr'</code></pre>
 
     intersect, setdiff, setequal, union</code></pre>
 </div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'reshape2'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:tidyr':
+
+    smiths</code></pre>
+</div>
 </div>
 <section id="technical-description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="technical-description"><span class="header-section-number">2.1</span> Technical Description</h2>
@@ -226,20 +237,20 @@ Attaching package: 'dplyr'</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read data</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>households <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/households.XPT'</span>, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'SMD470'</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>medical <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/medical.XPT'</span>, </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'MCQ010'</span>, <span class="st">'MCQ092'</span>, <span class="st">'MCQ160A'</span>, </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160C'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ160F'</span>, <span class="st">'MCQ160M'</span>, <span class="st">'MCQ160P'</span>, <span class="st">'MCQ160L'</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ550'</span>, <span class="st">'MCQ560'</span>, <span class="st">'MCQ220'</span>))</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>smoke <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/smoke.XPT'</span>, </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'SMQ020'</span>, <span class="st">'SMQ040'</span>, <span class="st">'SMD650'</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'SMD100FL'</span>, <span class="st">'SMQ621'</span>))</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">merge</span>(households, smoke, <span class="at">by =</span> <span class="st">'SEQN'</span>)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">merge</span>(data, medical, <span class="at">by =</span> <span class="st">'SEQN'</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>households <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/households.XPT'</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'SMD470'</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>medical <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/medical.XPT'</span>, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'MCQ010'</span>, <span class="st">'MCQ092'</span>, <span class="st">'MCQ160A'</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160C'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ160F'</span>, <span class="st">'MCQ160M'</span>, <span class="st">'MCQ160P'</span>, <span class="st">'MCQ160L'</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'MCQ550'</span>, <span class="st">'MCQ560'</span>, <span class="st">'MCQ220'</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>smoke <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">'data/smoke.XPT'</span>, </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">'SEQN'</span>, <span class="st">'SMQ020'</span>, <span class="st">'SMQ040'</span>, <span class="st">'SMD650'</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'SMD100FL'</span>, <span class="st">'SMQ621'</span>))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">merge</span>(households, smoke, <span class="at">by =</span> <span class="st">'SEQN'</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">merge</span>(data, medical, <span class="at">by =</span> <span class="st">'SEQN'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    SEQN SMD470 SMQ020 SMQ040 SMD650 SMD100FL SMQ621 MCQ010 MCQ092 MCQ160A
@@ -376,16 +387,16 @@ Attaching package: 'dplyr'</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>missing <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"key"</span>, <span class="at">value =</span> <span class="st">"val"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">is.missing =</span> <span class="fu">is.na</span>(val)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(key, is.missing) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">num.missing =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(is.missing<span class="sc">==</span>T) <span class="sc">%&gt;%</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>is.missing) <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(num.missing)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">num.contain =</span> count <span class="sc">-</span> num.missing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>missing <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"key"</span>, <span class="at">value =</span> <span class="st">"val"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">is.missing =</span> <span class="fu">is.na</span>(val)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(key, is.missing) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">num.missing =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(is.missing<span class="sc">==</span>T) <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>is.missing) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(num.missing)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">num.contain =</span> count <span class="sc">-</span> num.missing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'key'. You can override using the `.groups`
@@ -396,9 +407,9 @@ argument.</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(missing) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> key, <span class="at">y =</span> num.missing), <span class="at">stat =</span> <span class="st">'identity'</span>) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'variables'</span>, <span class="at">y =</span> <span class="st">'count of missing values'</span>, <span class="at">title =</span> <span class="st">'Bar plot of missing values'</span>) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(missing) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> key, <span class="at">y =</span> num.missing), <span class="at">stat =</span> <span class="st">'identity'</span>) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'variables'</span>, <span class="at">y =</span> <span class="st">'count of missing values'</span>, <span class="at">title =</span> <span class="st">'Bar plot of missing values'</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="data_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
@@ -407,16 +418,16 @@ argument.</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">length</span>(missing<span class="sc">$</span>num.missing)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pie <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">'value'</span> <span class="ot">=</span> <span class="fu">c</span>(missing<span class="sc">$</span>num.missing, missing<span class="sc">$</span>num.contain),</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'category'</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">'miss'</span>, count), <span class="fu">rep</span>(<span class="st">'contain'</span>, count)),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'variable'</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(missing<span class="sc">$</span>key, <span class="dv">2</span>)))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pie, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> value, <span class="at">fill =</span> category)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">'y'</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable) <span class="sc">+</span> </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>, <span class="at">title =</span> <span class="st">'Pie charts of missing values'</span>) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid  =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">length</span>(missing<span class="sc">$</span>num.missing)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pie <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">'value'</span> <span class="ot">=</span> <span class="fu">c</span>(missing<span class="sc">$</span>num.missing, missing<span class="sc">$</span>num.contain),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'category'</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">'miss'</span>, count), <span class="fu">rep</span>(<span class="st">'contain'</span>, count)),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'variable'</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(missing<span class="sc">$</span>key, <span class="dv">2</span>)))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pie, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> value, <span class="at">fill =</span> category)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">'y'</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable) <span class="sc">+</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>, <span class="at">title =</span> <span class="st">'Pie charts of missing values'</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid  =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="data_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
@@ -426,24 +437,24 @@ argument.</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="fu">c</span>(<span class="st">'MCQ160A'</span>, <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160C'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>, <span class="st">'MCQ160F'</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'MCQ160M'</span>, <span class="st">'MCQ160P'</span>, <span class="st">'MCQ160L'</span>, <span class="st">'MCQ550'</span>, <span class="st">'MCQ560'</span>, <span class="st">'MCQ220'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="fu">c</span>(<span class="st">'MCQ160A'</span>, <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160C'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>, <span class="st">'MCQ160F'</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'MCQ160M'</span>, <span class="st">'MCQ160P'</span>, <span class="st">'MCQ160L'</span>, <span class="st">'MCQ550'</span>, <span class="st">'MCQ560'</span>, <span class="st">'MCQ220'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Regarding the smoking status variables, we decide to drop SMD650, SMD100FL, and SMQ621 variables since there are too many missing values. For the rest of the data we drop any row contain NAs.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">'SMD650'</span>, <span class="st">'SMD100FL'</span>, <span class="st">'SMQ621'</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">'SMD650'</span>, <span class="st">'SMD100FL'</span>, <span class="st">'SMQ621'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    SEQN SMD470 SMQ020 SMQ040 MCQ010 MCQ092 MCQ160A MCQ160B MCQ160C MCQ160D
@@ -463,13 +474,112 @@ argument.</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">'There are '</span>, <span class="fu">nrow</span>(data), <span class="st">' records in total.'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">'There are '</span>, <span class="fu">nrow</span>(data), <span class="st">' records in total.'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "There are  1829  records in total."</code></pre>
 </div>
 </div>
 <p>The result data looks clean now. We have 1829 records in total, which is a sufficient amount.</p>
+</section>
+<section id="feature-selection" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="feature-selection"><span class="header-section-number">2.4</span> Feature Selection</h2>
+<p>After treating missing values, we examine the real-life significance of columns and their correlation values, drop the following columns from the data, thus to prevent information overlapping among columns:</p>
+<ul>
+<li>SMQ020: Smoked at least 100 cigarettes in life. The answer is ‘yes’ for everyone who smoke, according to the data.</li>
+<li>MCQ160B: Ever told had heart failure. The four hear-related diseases has the same possible levels and similar distribution. After checking the correlation between each feature and the independent features (explained below), we drop MCQ160B, MCQ160D and MCQ160E and keep MCQ160C.</li>
+<li>MCQ160D: Ever told had angina/angina pectoris. Angina pectoris is the chest pain caused by insufficient blood and oxygen suppliant to heart and is associated with coronary heart disease (MCQ160C).</li>
+<li>MCQ160E: Ever told had heart attack. Same reason as MCQ160B.</li>
+<li>MCQ560: Ever had gallbladder surgery. This feature is included in MCQ550, ‘Has DR ever said you have gallstones’, and the two features have almost the same distribution.</li>
+</ul>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Index</th>
+<th style="text-align: left;">Variable Description After Preprocessing and Selection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SEQN</td>
+<td style="text-align: left;">Respondent sequence number</td>
+</tr>
+<tr class="even">
+<td>SMD470</td>
+<td style="text-align: left;"># of people who smoke inside this home</td>
+</tr>
+<tr class="odd">
+<td>SMQ040</td>
+<td style="text-align: left;">Do you now smoke cigarettes?</td>
+</tr>
+<tr class="even">
+<td>MCQ010</td>
+<td style="text-align: left;">Ever been told you have asthma</td>
+</tr>
+<tr class="odd">
+<td>MCQ092</td>
+<td style="text-align: left;">Ever receive blood transfusion</td>
+</tr>
+<tr class="even">
+<td>MCQ160A</td>
+<td style="text-align: left;">Doctor ever said you had arthritis</td>
+</tr>
+<tr class="odd">
+<td>MCQ160C</td>
+<td style="text-align: left;">Ever told had coronary heart disease</td>
+</tr>
+<tr class="even">
+<td>MCQ160F</td>
+<td style="text-align: left;">Ever told you had a stroke</td>
+</tr>
+<tr class="odd">
+<td>MCQ160M</td>
+<td style="text-align: left;">Ever told you had thyroid problem</td>
+</tr>
+<tr class="even">
+<td>MCQ160P</td>
+<td style="text-align: left;">Ever told you had COPD, emphysema, ChB</td>
+</tr>
+<tr class="odd">
+<td>MCQ160L</td>
+<td style="text-align: left;">Ever told you had any liver condition</td>
+</tr>
+<tr class="even">
+<td>MCQ550</td>
+<td style="text-align: left;">Has DR ever said you have gallstones</td>
+</tr>
+<tr class="odd">
+<td>MCQ220</td>
+<td style="text-align: left;">Ever told you had cancer or malignancy</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">'SMQ020'</span>, <span class="st">'MCQ160B'</span>, <span class="st">'MCQ160D'</span>, <span class="st">'MCQ160E'</span>, <span class="st">'MCQ560'</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(data, <span class="st">'data/data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>As shown in the correlation heatmap below, after feature selection, no feature pair exhibits high correlation that may result in multi-collinearity or information overlapping.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cormat <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(data[, <span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>]),<span class="dv">2</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">melt</span>(cormat), <span class="fu">aes</span>(<span class="at">x=</span>Var1, <span class="at">y=</span>Var2, <span class="at">fill=</span>value)) <span class="sc">+</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'variables'</span>, <span class="at">y =</span> <span class="st">'variables'</span>, <span class="at">title =</span> <span class="st">'Correlation Heatmap'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="data_files/figure-html/heatmap after selection-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="identifying-dependency" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="identifying-dependency"><span class="header-section-number">2.5</span> Identifying Dependency</h2>
+<p>In this study, we consider the conditions of smoking (SMD470, SMQ040) - number of people who smoke in the household and whether the questionnaire-respondent smoke - as the independent features. SEQN, the respondent sequence number, or ID, doesn’t hold statistical meaning. The remaining ten features that describe health condition are considered dependent features.</p>
 
 
 </section>
