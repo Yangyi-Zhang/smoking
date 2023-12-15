@@ -1,0 +1,269 @@
+# Results
+
+```{r import libary, echo=FALSE, message=FALSE, warnings=FALSE}
+#install.packages('ggalluvial')
+library(ggalluvial)
+library(forcats)
+#install.packages('ggmosaic')
+library(ggmosaic)
+library(GGally)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(tibble)
+library(zoo)
+library(readr)
+library(remotes)
+library(vcd)
+remotes::install_github('haleyjeppson/ggmosaic')
+```
+
+In the Results section, we explore data visualization with the Alluvium plot, Mosaic plot (general, faceted), Stack-bar plot (count and proportion), and Cleveland-dot plot. We then analyze the data from various aspects, as different information has been provided by each plot.
+
+```{r data transformation, echo=FALSE, message=FALSE, warnings=FALSE}
+# Use pivot_longer to combine the two independent columns ( so we can use facet later)
+data <- read_csv('data/data.csv')
+data2 <- data %>% mutate_at(colnames(data)[2:13], as.factor)
+# translate levels into English
+# number of smoker in house
+data2 <- data2 %>% rename(smoker_in_house = SMD470)
+data2$smoker_in_house <- fct_recode(data2$smoker_in_house, zero="0", one="1", more="2")
+# smoking frequency
+data2 <- data2 %>% rename(smoke_freq = SMQ040)
+data2$smoke_freq <- fct_recode(data2$smoke_freq, daily="1", smt="2", no="3")
+```
+
+## Alluvium plot
+
+```{r data transformation for alluvium, echo=FALSE, message=FALSE, warnings=FALSE}
+# pivot longer
+data3 <- pivot_longer(data2, c(smoke_freq,smoker_in_house), names_to = 'Smoking_exposure_type', values_to = 'Smoking_exposure')
+data3 <- data3 %>% mutate_at(colnames(data3)[12:13], as.factor)
+```
+
+We visualize two Alluvium plot2, where the flows are the two independent features - smoking frequency and number of household smoker - relatively. While the two panels has different stratas that represent each independent feature on the first axis, they share the remaining sets of axes, each representing a disease potentially associated with smoking exposure. These shared axes each describes a health condition, where "1" stands for "has the specified disease", "2" stands for "no", and "9" stands for "unknown."
+
+From the visual, we can see the majority respondent smokes daily, and the majority household has zero smoker. These two findings do not contradict since the household smoker number does not include the respondent.
+
+The flow patterns for the two independent features are visually similar yet provide different information. From the upper panel, we observe that the majority respondent - the daily smokers, casual smokers, and non-smokers - do not have any disease, and only a few people answers 'unknown' toward their health condition. Most people having one disease does not have a second disease. Most people having disease are daily smokers, or, surprisingly, non-smokers.
+
+From the lower panel, we observe that the majority household has no smoker (exclude respondent). A larger proportion of respondents in households with one or more smokers have disease, comparing to that of respondents in households with no smoker.
+
+We can also see whether people having one disease have other diseases by tracing the flows. However, we will not discuss the findings here since the study focuses on the health concern associates with smoking.
+
+While the alluvium allows us to trace the flows, the plot becomes complicated since we have too many features. We will explore other visuals to have a more thorough view of the case.
+
+```{r alluvium, warning=FALSE}
+ggplot(as.data.frame(data3), 
+       aes(axis1=Smoking_exposure, axis2=MCQ010, axis3=MCQ092,
+           axis4=MCQ160A, axis5=MCQ160C, axis6=MCQ160F, axis7=MCQ160M,
+           axis8=MCQ160P, axis9=MCQ160L, axis10=MCQ550, axis11=MCQ220)) +
+  geom_alluvium(aes(fill=data3$Smoking_exposure), width=1/12) +
+  geom_stratum(width=1/12, fill='grey80', color="grey") +
+  geom_label(stat='stratum', aes(label=after_stat(stratum))) +
+  scale_x_discrete(limits=c("Exposure", "MCQ010", "MCQ092", 
+                            "MCQ160A", "MCQ160C", "MCQ160F", "MCQ160M", 
+                            "MCQ160P", "MCQ160L", "MCQ550", "MCQ220"), 
+                   expand=c(0.05,0.05)) +
+  scale_fill_brewer(type='qual', palette='Set1') +
+  facet_grid(data3$Smoking_exposure_type, space='free') +
+  guides(fill=guide_legend(ncol=2)) +
+  labs(fill="Exposure type") + 
+  ggtitle("Smoking exposure and health condition") +
+  theme(plot.title=element_text(hjust = 0.5),
+        #legend.position = "bottom",
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Mosaic plot
+
+In the mosaic plot, we study the relationship among the two independent features and the dependent feature: health condition, represented by medical history associated with ten diseases. We plot all diseases as one feature on the first, general plot and study each separately with facet on the second plot.
+
+```{r data transformation for mosaic, echo=FALSE, message=FALSE, warnings=FALSE}
+data2 <- data2 %>% mutate(
+  MCQ010 = recode(MCQ010, "1"="yes","2"="no","9"="unk"),
+  MCQ092 = recode(MCQ092, "1"="yes","2"="no","9"="unk"),
+  MCQ160A = recode(MCQ160A, "1"="yes","2"="no","9"="unk"),
+  MCQ160C = recode(MCQ160C, "1"="yes","2"="no","9"="unk"),
+  MCQ160F = recode(MCQ160F, "1"="yes","2"="no","9"="unk"),
+  MCQ160M = recode(MCQ160M, "1"="yes","2"="no","9"="unk"),
+  MCQ160P = recode(MCQ160P, "1"="yes","2"="no","9"="unk"),
+  MCQ160L = recode(MCQ160L, "1"="yes","2"="no","9"="unk"),
+  MCQ550 = recode(MCQ550, "1"="yes","2"="no","9"="unk"),
+  MCQ220 = recode(MCQ220, "1"="yes","2"="no","9"="unk"))
+# pivot_longer
+data2 <- pivot_longer(data2, c("MCQ010", "MCQ092", "MCQ160A", "MCQ160C", 
+                               "MCQ160F", "MCQ160M", "MCQ160P", "MCQ160L", 
+                               "MCQ550", "MCQ220"), 
+                      names_to = "Disease_type", values_to = "Disease")
+data2 <- data2 %>% mutate_at(colnames(data2)[4:5], as.factor)
+```
+
+### General Mosaic plot
+
+The general mosaic plot supports previous observations and provides additional information on the proportion of data in groups. Since the ten dependent disease features share the same set of labels, we combine them into a general health-condition feature, where "yes" stands for "having disease", "no" for "not having disease", and "unk" for "not knowing if having disease." The modified data reflects the true proportion of health condition since the total number of observations for each disease feature is the same.
+
+From the general mosaic, we conclude that the majority respondent have no disease. Among respondents who have diseases, most people are daily smokers, or have one smoker (not including the respondent) at home.
+
+```{r mosaic general, echo=FALSE, message=FALSE, warnings=FALSE}
+colors = c("#BC8F6F","#F5DEB9", "#87CEEB")
+vcd::mosaic(Disease ~ smoke_freq+smoker_in_house, 
+            data=data2, direction=c("v","v","h"),
+            rot_labels=c(0, 0, 45, 0),
+            spacing_args = list(0.2),
+            highlighting_fill = colors)
+```
+
+### Mosaic plot for each disease
+
+A faceted mosaic plot is drawn to study the data proportions for each disease and to check whether Simpson's paradox exists. From the plots, we observe that daily smokers and non-smokers have the highest proportion of having diseases. On MCQ160P, daily smokers take a greater proportion of people having disease; on MCQ220 and MCQ550, non-smokers are the majority. Also, a larger proportion of respondents in households with one or more smokers have disease, in comparison with the proportion of respondents in households with no smoker. The previous observations are generally supported, so the Simpson's paradox does not exist.
+
+The faceted plot provide additional insights on each disease. For example a small proportion of respondents have MCQ160C, and little variation is observed from group to group. Therefore, MCQ160C may not have a significant association with smoking exposure. 
+```{r mosaic plot facet on disease, echo=FALSE, message=FALSE, warnings=FALSE}
+ggplot(data=data2) +
+  geom_mosaic(aes(x=product(smoke_freq,smoker_in_house), fill=Disease)) +
+  theme(plot.title=element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        axis.text.x = element_text(angle=70, size=6),
+        axis.ticks.x = element_blank()) +
+  facet_wrap(~data2$Disease_type, nrow = 3) +
+  ggtitle("Mosaic plot on smoking exposure v.s. disease")
+```
+
+## Bar-chart facet by types of diseases
+
+In this part, we analyze the possible influence of smoking exposure to having certain disease. The smoking exposure is divided to smoking frequency and secondhand smoking exposure.
+
+### Smoking frequency
+
+```{r bar chart facet by disease types 1}
+#seperate smoking frequency and secondhand smoking exposure data
+#pivot longer using disease types
+data_direct = filter(data3, Smoking_exposure_type == 'smoke_freq')
+data_direct = subset(data_direct, select = -c(Smoking_exposure_type))
+data_direct = pivot_longer(data_direct, MCQ010:MCQ220, names_to = 'Disease_type', values_to = 'Disease')
+data_second = filter(data3, Smoking_exposure_type == 'smoker_in_house')
+data_second = subset(data_second, select = -c(Smoking_exposure_type))
+data_second = pivot_longer(data_second, MCQ010:MCQ220, names_to = 'Disease_type', values_to = 'Disease')
+
+ggplot(data_direct, aes(fill=Disease, x=Smoking_exposure)) + 
+  geom_bar(position='stack') +
+  facet_wrap(~Disease_type) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  theme(plot.title=element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'Count', y = 'Smoking Frequency', title = 'Stacked Bar-chart: Smoking Frequency')
+```
+
+We focus on the influence of smoking frequency to the probability of having certain disease. We find that the influence of smoking is especially noticeable for MCQ010-asthma, MCQ160A-arthritis, and MCQ160P-COPD, emphysema, ChB. For these three categories, the number of respondents smoke daily and have had the disease is much higher than the number of respondents do not smoke daily and have had the disease.
+
+```{r bar chart facet by disease types proportion 1}
+#bar chart
+ggplot(data_direct, aes(fill=Disease, x=Smoking_exposure)) + 
+  geom_bar(position='fill') +
+  facet_wrap(~Disease_type) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  theme(plot.title=element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'Count', y = 'Smoking Member in House', title = 'Stacked Bar-chart in Proprtion: Smoking Frequency')
+```
+
+We regenerate the bar chart and set the y-axis scale as proportion. This will eliminate the disturbing of the imbalanced data (the number of people smoking daily in this survey is much higher than the number of respondents smoking sometimes or no). According to the stacked bar-chart, the proportion of getting MCQ160P-COPD, emphysema, ChB, is higher for the group of respondents smoking daily. We thus conclude that smoking frequency has positive effect to the probability of gettingCOPD, emphysema, and ChB.
+
+### Secondhand smoking exposure
+
+```{r bar chart facet by disease types 2}
+#bar chart
+ggplot(data_second, aes(fill=Disease, x=Smoking_exposure)) + 
+  geom_bar(position='stack') +
+  facet_wrap(~Disease_type) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  theme(plot.title=element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'Count', y = 'Smoking Member in House', title = 'Stacked Bar-chart: Secondhand Smoking Exposure')
+```
+
+We focus on the influence of secondhand smoking exposure to the probability of having certain disease. The secondhand smoking exposure is measure by the reported number of respondents smoking at home. We find that the influence of secondhand smoking exposure is noticeable for MCQ010-asthma, MCQ160A-arthritis, MCQ160P-COPD, emphysema, ChB, and MCQ220-cancer or malignancy. For these three categories, the number of respondents have had the disease and one or more family members smoke at home is much higher than the number of respondents have had the disease and zero family member smoke at home.
+
+```{r bar chart facet by disease types proportion 2}
+#bar chart
+ggplot(data_second, aes(fill=Disease, x=Smoking_exposure)) + 
+  geom_bar(position='fill') +
+  facet_wrap(~Disease_type) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  theme(plot.title=element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'Count', y = 'Smoking Member in House', title = 'Stacked Bar-chart in Proportion: Secondhand Smoking Exposure')
+```
+
+We regenerate the bar chart and set the y-axis scale as proportion as before. According to the stacked bar-chart, the proportion of getting MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB, are much higher for the group of respondents that one or more family members smoke at home. For other diseases, there are also small increasings in proportions when comparing the group of respondents that one or more family members smoke at home with the group of respondents that have zero family members smoke at home. We thus conclude that secondhand exposure will increase the probability of getting disease in general, and is especially influential to arthritis and COPD, emphysema, ChB.
+
+## Cleveland-dot plot
+
+We use two Cleveland Dot plots to visualize the influence of smoking exposure to probability of getting difference diseases by summarizing the count of respondents having and not having disease for each disease and smoking exposure groups. The Cleveland Dot plot allows us to visualize the differences in number of answers among different diseases categories.
+
+### Smoking frequency
+
+```{r cleveland dot plot 1, echo=FALSE, message=FALSE, warnings=FALSE}
+data_direct %>%
+  count(Disease_type, Disease, Smoking_exposure) %>%
+  ggplot(aes(x = n, y = Disease_type)) +
+  geom_point(aes(colour = Disease)) +
+  facet_wrap(~Smoking_exposure) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  theme(plot.title=element_text(hjust = 0.5)) +
+  labs(x = 'Count', y = 'Disease type', title = 'Cleveland Dot: Smoking Frequency')
+```
+
+We can see that the number of answer 'yes' in MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of respondents smoking daily. For MCQ160A, the proportion of 'yes' is high for all three smoking exposure groups, whereas for MCQ160P, the proportion of 'yes' is high only for the group of respondents smoking daily. Thus we make conclusion that probability of getting MCQ160P-COPD, emphysema, ChB will be influenced by smoking frequency. This conclusion is consistent with the conclusion from Bar-chart.
+
+### Secondhand smoking exposure
+
+```{r cleveland dot plot 2}
+data_second %>%
+  count(Disease_type, Disease, Smoking_exposure) %>%
+  ggplot(aes(x = n, y = Disease_type)) +
+  geom_point(aes(colour = Disease)) +
+  facet_wrap(~Smoking_exposure) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  theme(plot.title=element_text(hjust = 0.5)) +
+  labs(x = 'Count', y = 'Disease type', title = 'Cleveland Dot: Secondhand Smoking Exposure')
+```
+
+We can see that the number of answer 'yes' in MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of respondents that there is one or more family member smoking at home. Besides, the proportion of 'yes' is higher compared to the group of respondents that there is zero family member smoking at home for MCQ160P. Thus we make conclusion that probability of getting MCQ160P-COPD, emphysema, ChB will be influenced by secondhand exposure. This conclusion is consistent with the conclusion from Bar-chart, but it is not clear that whether there is a general influence of secondhand exposure to probability of getting disease by analyzing this Clevelard dot plot.
+
+## Bar-chart facet by smoking exposure
+
+Similar to Cleveland Dotplot, we want to compare the influence between different diseases using horizontal bar-charts where x-axis represents the proportion of the response to every disease.
+
+### Smoking frequency
+
+```{r bar chart facet by smoking exposure 1}
+ggplot(data_direct, aes(fill=Disease, x=Disease_type)) + 
+  geom_bar(position='fill') +
+  facet_wrap(~Smoking_exposure, ncol = 3) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  coord_flip() +
+  theme(plot.title=element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'Disease type', y = 'Proportion', title = 'Bar-chart: Smoking Frequency')
+```
+
+We can see that the proportion of answer 'yes' in MCQ010-asthm, MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of people smoking daily. For MCQ010 and MCQ160A, the proportion of 'yes' is high for all three smoking exposure groups, whereas for MCQ160P, the proportion of 'yes' is high only for the group of respondents smoking daily. Thus we make conclusion that probability of getting MCQ160P-COPD, emphysema, ChB will be influenced by smoking frequency. This conclusion is consistent with the conclusion from Clevelard dot plot.
+
+### Secondhand smoking exposure
+
+```{r bar chart facet by smoking exposure 2}
+ggplot(data_second, aes(fill=Disease, x=Disease_type)) + 
+  geom_bar(position='fill') +
+  facet_wrap(~Smoking_exposure, ncol = 3) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  coord_flip() + 
+  theme(plot.title=element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  labs(x = 'Disease type', y = 'Proportion', title = 'Bar-chart: Secondhand Smoking Exposure')
+```
+
+We can see that the proportion of answer 'yes' in MCQ010-asthm, MCQ160A-arthritis, and MCQ160P-COPD, emphysema, ChB, is significantly higher compared to other diseases for the group of respondents that there is one family member smoke at home. For MCQ160A and MCQ160P, the proportion of 'yes' is higher compared to the group of respondents that there is zero family member smoke at home. Thus we make conclusion that probability of getting MCQ160A-arthritis and MCQ160P-COPD, emphysema, ChB will be influenced by smoking frequency. This conclusion is consistent with the conclusion from the bar-charts facet by disease types.
